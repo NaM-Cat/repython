@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import numpy.random as rand_prb
+import calendar
+from datetime import date
 
 LIST_OF_RECRUTED = []   #Список принятых на работу
 LIST_OF_FIRED = []      #Список уволенных с работы
@@ -11,6 +13,7 @@ class District:
     def __init__(self, name, population):
         self.name = name
         self.population = population
+        DISTRICTS.append(self) 
 
 
 class Employee:
@@ -32,8 +35,6 @@ class Papperboy(Employee):
         LIST_OF_RECRUTED.remove(self)
         
         
-   # def recruit(self, name)
-   #     Papperboy.__init__(self, name);
    
 def prdct_perm():
     return 2000
@@ -46,32 +47,43 @@ def prdct_prb():
     prdct_list = [1200, 1000, 800]
     return rand_prb.choice(prdct_list, p=prb_list)
 
-DISTRICTS.append(District('VIZ', 10000))
-DISTRICTS.append(District('Centr', 20000))
-DISTRICTS.append(District('Uralmash', 15000))
-DISTRICTS.append(District('Elmash', 14000))
-DISTRICTS.append(District('Sortirovka', 7000))
+District('VIZ', 10000)
+District('Centr', 20000)
+District('Uralmash', 15000)
+District('Elmash', 14000)
+District('Sortirovka', 7000)
+
 print (DISTRICTS[0].name, DISTRICTS[0].population)
-#print(DISTRICTS)
+
 print('--------------------')
 
-Workers = []
-Workers.append(Papperboy('Алексеев Геннадий Викторович'))
-Workers.append(Papperboy('Хазанов Владимир Андреевич'))
-Workers.append(Papperboy('Олейко Иван Петрович'))
-#print(Workers)
+
+Papperboy('Алексеев Геннадий Викторович')
+Papperboy('Хазанов Владимир Андреевич')
+Papperboy('Олейко Иван Петрович')
+
+print(LIST_OF_RECRUTED[1].name)
+
 print('--------------------')
 
-Workers[0].productivity = prdct_perm
-Workers[1].productivity = prdct_prb
-Workers[2].productivity = prdct_distr(DISTRICTS[3])
-print (Workers[2].productivity)
+LIST_OF_RECRUTED[0].productivity = prdct_perm
+LIST_OF_RECRUTED[1].productivity = prdct_prb
+LIST_OF_RECRUTED[2].productivity = prdct_distr(DISTRICTS[3])
 
-#print(Workers)
+print (LIST_OF_RECRUTED[2].productivity)
 
-#print(Workers)
 print('--------------------')
 
+Calendar = calendar.TextCalendar()
+print(Calendar.formatmonth(2016,4))
+
+print('--------------------')
+print(date(2016,4,11))
+
+print('--------------------')
+a = 1
+a = 'day'
+print(a)
 
 
     
