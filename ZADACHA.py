@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 import numpy.random as rand_prb
 
+LIST_OF_RECRUTED = []   #Список принятых на работу
+LIST_OF_FIRED = []      #Список уволенных с работы
+DISTRICTS = []          #Список районов
+
 class District:
     """Районы города"""
     
@@ -20,12 +24,17 @@ class Papperboy(Employee):
     
     def __init__(self, name, productivity = 0):
         Employee.__init__(self, name)
+        LIST_OF_RECRUTED.append(self)
         self.productivity = productivity
+    
+    def __del__(self):
+        LIST_OF_FIRED.append(self)
+        LIST_OF_RECRUTED.remove(self)
+        
         
    # def recruit(self, name)
    #     Papperboy.__init__(self, name);
- 
-INCOME = 0  
+   
 def prdct_perm():
     return 2000
 
@@ -37,14 +46,13 @@ def prdct_prb():
     prdct_list = [1200, 1000, 800]
     return rand_prb.choice(prdct_list, p=prb_list)
 
-Districts = []
-Districts.append(District('VIZ', 10000))
-Districts.append(District('Centr', 20000))
-Districts.append(District('Uralmash', 15000))
-Districts.append(District('Elmash', 14000))
-Districts.append(District('Sortirovka', 7000))
-print (Districts[0].name, Districts[0].population)
-#print(Districts)
+DISTRICTS.append(District('VIZ', 10000))
+DISTRICTS.append(District('Centr', 20000))
+DISTRICTS.append(District('Uralmash', 15000))
+DISTRICTS.append(District('Elmash', 14000))
+DISTRICTS.append(District('Sortirovka', 7000))
+print (DISTRICTS[0].name, DISTRICTS[0].population)
+#print(DISTRICTS)
 print('--------------------')
 
 Workers = []
@@ -56,7 +64,7 @@ print('--------------------')
 
 Workers[0].productivity = prdct_perm
 Workers[1].productivity = prdct_prb
-Workers[2].productivity = prdct_distr(Districts[3])
+Workers[2].productivity = prdct_distr(DISTRICTS[3])
 print (Workers[2].productivity)
 
 #print(Workers)
