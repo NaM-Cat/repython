@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import numpy.random as rand_prb
 import calendar
+import sqlite3
 from datetime import date
 
 LIST_OF_RECRUTED = []   #Список принятых на работу
@@ -13,7 +14,10 @@ class District:
     def __init__(self, name, population):
         self.name = name
         self.population = population
-        DISTRICTS.append(self) 
+        DISTRICTS.append(self)
+    def __conform__(self, protocol):
+        if protocol is sqlite3.PrepareProtocol:
+            return "%s|%s" % (self.name, self.population)
 
 
 class Employee:
@@ -52,6 +56,20 @@ District('Centr', 20000)
 District('Uralmash', 15000)
 District('Elmash', 14000)
 District('Sortirovka', 7000)
+
+con = sqlite3.connect("catalog_zadach.db")
+cur = con.cursor()
+try:
+    cur.execute("CREATE TABLE distr (id INT PRIMARY KEY , name TEXT, population INT)")
+ #   cur.execute("INSERT INTO distr(name, population) VALUES (?,?)", (District))
+except sqlite3.DatabaseError:
+    print ("Ошибка:")
+else:
+    print ("Запрос успешно выполнен")
+    con.commit()
+cur.close()
+con.close()
+#raw_input()
 
 print (DISTRICTS[0].name, DISTRICTS[0].population)
 
