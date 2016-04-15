@@ -60,8 +60,9 @@ District('Sortirovka', 7000)
 con = sqlite3.connect("catalog_zadach.db")
 cur = con.cursor()
 try:
-    cur.execute("CREATE TABLE distr (id INT PRIMARY KEY , name TEXT, population INT)")
- #   cur.execute("INSERT INTO distr(name, population) VALUES (?,?)", (District))
+    cur.execute("DROP TABLE IF EXISTS distr")
+    cur.execute("CREATE TABLE distr (id INTEGER PRIMARY KEY , name TEXT, population INTEGER)")
+    cur.executemany("INSERT INTO distr(name, population) VALUES (?,?)", DISTRICTS)
 except sqlite3.DatabaseError:
     print ("Ошибка:")
 else:

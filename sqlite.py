@@ -1,20 +1,30 @@
 import sqlite3
+d = (
+    ('VIZ', 10000),
+    ('Centr', 20000),
+    ('Uralmash', 15000),
+    ('Elmash', 14000),
+    ('Sortirovka', 7000)
+)
 
-persons = [
-    ("Hugo", "Boss"),
-    ("Calvin", "Klein")
-    ]
+con = sqlite3.connect("cat.db")
+cur = con.cursor()
+cur.execute("DROP TABLE IF EXISTS distr")
+cur.execute("CREATE TABLE distr (id INTEGER PRIMARY KEY , name TEXT, population INT)")
+cur.executemany("INSERT INTO distr(name, population) VALUES (?,?)", d)
+#except sqlite3.DatabaseError:
+#    print ("Ошибка:")
+#else:
+#    print ("Запрос успешно выполнен")
+con.commit()
 
-con = sqlite3.connect(":memory:")
-
-# Create the table
-con.execute("create table person(firstname, lastname)")
-
-# Fill the table
-con.executemany("insert into person(firstname, lastname) values (?, ?)", persons)
-
-# Print the table contents
-for row in con.execute("select firstname, lastname from person"):
-    print row
-
-print ("I just deleted", con.execute("delete from person").rowcount, "rows")
+with con:    
+   # cur = con.cursor()    
+    cur.execute("SELECT * FROM distr")
+    rows = cur.fetchall()
+ 
+    for row in rows:
+        print (row)
+        
+cur.close()
+con.close()
