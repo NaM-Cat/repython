@@ -14,7 +14,7 @@ class District:
     def __init__(self, name, population):
         self.name = name
         self.population = population
-        DISTRICTS.append(self)
+        DISTRICTS.append((self.name, self.population))
 
     def __str__(self):
         return '[District: %s, %s]' % (self.name, self.population)
@@ -27,15 +27,15 @@ class District:
 class Employee:
     """ Класс всех сотрудников"""
     
-    def __init__(self, name):
+    def __init__(self, name, job):
         self.name = name
 
 class Papperboy(Employee):
     """ Разносчики газет"""
     
     def __init__(self, name, productivity = 0):
-        Employee.__init__(self, name)
-        LIST_OF_RECRUTED.append(self)
+        Employee.__init__(self, name, 'papperboy')
+        LIST_OF_RECRUTED.append(name, productivity, Employee.__init__.job)
         self.productivity = productivity
     
     def __del__(self):
@@ -71,29 +71,29 @@ except sqlite3.DatabaseError:
     print ("Ошибка:")
 else:
     print ("Запрос успешно выполнен")
-    con.commit()
+con.commit()
 cur.close()
 con.close()
 #raw_input()
 
-print (DISTRICTS[0])
+print (DISTRICTS)
 
 print('--------------------')
 
 
-Papperboy('Алексеев Геннадий Викторович')
-Papperboy('Хазанов Владимир Андреевич')
-Papperboy('Олейко Иван Петрович')
+#Papperboy('Алексеев Геннадий Викторович')
+#Papperboy('Хазанов Владимир Андреевич')
+#Papperboy('Олейко Иван Петрович')
 
-print(LIST_OF_RECRUTED[1].name)
+#print(LIST_OF_RECRUTED[1].name)
 
 print('--------------------')
 
-LIST_OF_RECRUTED[0].productivity = prdct_perm
-LIST_OF_RECRUTED[1].productivity = prdct_prb
-LIST_OF_RECRUTED[2].productivity = prdct_distr(DISTRICTS[3])
+#LIST_OF_RECRUTED[0].productivity = prdct_perm
+#LIST_OF_RECRUTED[1].productivity = prdct_prb
+#LIST_OF_RECRUTED[2].productivity = prdct_distr(DISTRICTS[3])
 
-print (LIST_OF_RECRUTED[2].productivity)
+#print (LIST_OF_RECRUTED[2].productivity)
 
 print('--------------------')
 
