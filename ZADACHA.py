@@ -76,7 +76,7 @@ cur.close()
 con.close()
 #raw_input()
 
-print (DISTRICTS[0].name, DISTRICTS[0].population)
+print (DISTRICTS[0])
 
 print('--------------------')
 
