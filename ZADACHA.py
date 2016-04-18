@@ -15,6 +15,10 @@ class District:
         self.name = name
         self.population = population
         DISTRICTS.append(self)
+
+    def __str__(self):
+        return '[District: %s, %s]' % (self.name, self.population)
+    
     def __conform__(self, protocol):
         if protocol is sqlite3.PrepareProtocol:
             return "%s|%s" % (self.name, self.population)
