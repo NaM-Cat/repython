@@ -14,7 +14,7 @@ class District:
     def __init__(self, name, population):
         self.name = name
         self.population = population
-        DISTRICTS.append((self.name, self.population))
+        DISTRICTS.append(self)
 
     def __str__(self):
         return '[District: %s, %s]' % (self.name, self.population)
@@ -66,7 +66,8 @@ cur = con.cursor()
 try:
     cur.execute("DROP TABLE IF EXISTS distr")
     cur.execute("CREATE TABLE distr (id INTEGER PRIMARY KEY , name TEXT, population INTEGER)")
-    cur.executemany("INSERT INTO distr(name, population) VALUES (?,?)", DISTRICTS)
+    #надо попробовать здесь прописать цикл вставок в таблицу для каждого дистрикта
+    cur.executemany("INSERT INTO distr(name, population) VALUES (?,?)", (DISTRICTS[].name, DISTRICTS[].population))
 except sqlite3.DatabaseError:
     print ("Ошибка:")
 else:
