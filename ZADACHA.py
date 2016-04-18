@@ -27,7 +27,7 @@ class District:
 class Employee:
     """ Класс всех сотрудников"""
     
-    def __init__(self, name, job):
+    def __init__(self, name, job = None):
         self.name = name
 
 class Papperboy(Employee):
@@ -72,11 +72,20 @@ except sqlite3.DatabaseError:
 else:
     print ("Запрос успешно выполнен")
 con.commit()
+cur.execute("SELECT * FROM distr")
+print (cur.fetchall())
+
+#DISTRICTS
+#print (DISTRICTS)
+
+#cur.execute("SELECT * FROM distr")
+#print (cur.fetchall())
+
 cur.close()
 con.close()
 #raw_input()
 
-print (DISTRICTS)
+#print (DISTRICTS)
 
 print('--------------------')
 
