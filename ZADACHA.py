@@ -15,6 +15,14 @@ class District:
         self.name = name
         self.population = population
         DISTRICTS.append(self)
+        con = sqlite3.connect("catalog_zadach.db")
+        cur = con.cursor()
+        cur.execute("INSERT INTO distr(name, population) VALUES (?,?)", (DISTRICTS[len(DISTRICTS)-1].name, DISTRICTS[len(DISTRICTS)-1].population))
+        con.commit()
+        cur.execute("SELECT * FROM distr")
+        print (cur.fetchall())
+        cur.close()
+        con.close()
 
     def __str__(self):
         return '[District: %s, %s]' % (self.name, self.population)
@@ -22,6 +30,17 @@ class District:
     def __conform__(self, protocol):
         if protocol is sqlite3.PrepareProtocol:
             return "%s|%s" % (self.name, self.population)
+    
+    def change_population(self, new_population):
+        self.population = new_population
+        con = sqlite3.connect("catalog_zadach.db")
+        cur = con.cursor()
+        cur.execute("UPDATE distr SET population = (?) WHERE name = (?)", (new_population, self.name))
+        con.commit()
+        cur.execute("SELECT * FROM distr")
+        print (cur.fetchall())
+        cur.close()
+        con.close()
 
 
 class Employee:
@@ -55,19 +74,18 @@ def prdct_prb():
     prdct_list = [1200, 1000, 800]
     return rand_prb.choice(prdct_list, p=prb_list)
 
-District('VIZ', 10000)
-District('Centr', 20000)
-District('Uralmash', 15000)
-District('Elmash', 14000)
-District('Sortirovka', 7000)
+
 
 con = sqlite3.connect("catalog_zadach.db")
 cur = con.cursor()
 try:
     cur.execute("DROP TABLE IF EXISTS distr")
     cur.execute("CREATE TABLE distr (id INTEGER PRIMARY KEY , name TEXT, population INTEGER)")
+#    for i in range(0,len(DISTRICTS)):
+#        cur.execute("INSERT INTO distr(name, population) VALUES (?,?)", (DISTRICTS[i].name, DISTRICTS[i].population))      
+    
     #надо попробовать здесь прописать цикл вставок в таблицу для каждого дистрикта
-    cur.executemany("INSERT INTO distr(name, population) VALUES (?,?)", (DISTRICTS[].name, DISTRICTS[].population))
+    #cur.executemany("INSERT INTO distr(name, population) VALUES (?,?)", (DISTRICTS[].name, DISTRICTS[].population))
 except sqlite3.DatabaseError:
     print ("Ошибка:")
 else:
@@ -76,20 +94,27 @@ con.commit()
 cur.execute("SELECT * FROM distr")
 print (cur.fetchall())
 
-#DISTRICTS
-#print (DISTRICTS)
+District('VIZ', 10000)
+District('Centr', 20000)
+District('Uralmash', 15000)
+District('Elmash', 14000)
+District('Sortirovka', 7000)
+
+#DISTRICTS[0].population = 11000
+#print (DISTRICTS[0])
 
 #cur.execute("SELECT * FROM distr")
 #print (cur.fetchall())
 
-cur.close()
-con.close()
+#cur.close()
+#con.close()
 #raw_input()
 
 #print (DISTRICTS)
 
 print('--------------------')
 
+DISTRICTS[0].change_population(11000)
 
 #Papperboy('Алексеев Геннадий Викторович')
 #Papperboy('Хазанов Владимир Андреевич')
