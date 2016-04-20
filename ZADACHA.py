@@ -21,7 +21,9 @@ class District:
         cur.execute("INSERT INTO distr(name, population) VALUES (?,?)", (self.name, self.population))
         con.commit()
         cur.execute("SELECT * FROM distr")
-        print (cur.fetchall())
+        rows = cur.fetchall()
+        for row in rows:
+            print(row)
         cur.close()
         con.close()
 
@@ -40,7 +42,9 @@ class District:
         cur.execute("UPDATE distr SET population = (?) WHERE name = (?)", (new_population, self.name))
         con.commit()
         cur.execute("SELECT * FROM distr")
-        print (cur.fetchall())
+        rows = cur.fetchall()
+        for row in rows:
+            print(row)
         cur.close()
         con.close()
 
@@ -70,7 +74,10 @@ class Papperboy(Employee):
                      self.productivity))
         con.commit()
         cur.execute("SELECT * FROM employ")
-        print (cur.fetchall())
+        rows = cur.fetchall()
+        for row in rows:
+            print(row)
+        
         cur.close()
         con.close()
     
@@ -96,6 +103,42 @@ def prdct_prb():
     prdct_list = [1200, 1000, 800]
     return rand_prb.choice(prdct_list, p=prb_list)
 
+def index_max_popul_distr(list_of_distr):
+    index = 0
+    for i in range(0,len(list_of_distr)-1):
+        if(list_of_distr[i].population >= list_of_distr[i+1].population):
+            index = i
+    return index
+
+def index_min_popul_distr(list_of_distr):
+    index = 0
+    for i in range(0,len(list_of_distr)-1):
+        if(list_of_distr[i].population < list_of_distr[i+1].population):
+            index = i
+    return index
+    
+
+def create_grafic(month, list_of_employ, list_of_distr):
+    employ = 0
+    con = sqlite3.connect("catalog_zadach.db")
+    cur = con.cursor()
+    for day in range(1,calendar.monthrange(2016,month)[1]+1):
+        for distr in range(0,len(list_of_distr)):
+            if employ == len(list_of_employ):
+                employ = 0
+            cur.execute("INSERT INTO grafic(date, employ_name, distr_name) VALUES (?,?,?)",
+                        (date(2016,month,day),
+                        list_of_employ[employ].name,
+                        list_of_distr[distr].name))
+            employ += 1
+    con.commit()
+    cur.execute("SELECT * FROM grafic")
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
+    cur.close()
+    con.close()
+    
 con = sqlite3.connect("catalog_zadach.db")
 cur = con.cursor()
 try:
@@ -103,6 +146,8 @@ try:
     cur.execute("CREATE TABLE distr (id INTEGER PRIMARY KEY , name TEXT, population INTEGER)")
     cur.execute("DROP TABLE IF EXISTS employ")
     cur.execute("CREATE TABLE employ (id INTEGER PRIMARY KEY , name TEXT, job TEXT, productivity INTEGER)")
+    cur.execute("DROP TABLE IF EXISTS grafic")
+    cur.execute("CREATE TABLE grafic (date DATE, employ_name TEXT, distr_name TEXT)")
 except sqlite3.DatabaseError:
     print ("Ошибка:")
 else:
@@ -140,11 +185,14 @@ print(Calendar.formatmonth(2016,4))
 
 print('--------------------')
 print(date(2016,4,11))
+try:
+    d=date(2016,2,30)
+except ValueError or SyntaxError:
+    pass
+#print(d)
 
-print('--------------------')
-a = 1
-a = 'day'
-print(a)
+print('--------AAAAAAAAA------------')
+create_grafic(4,LIST_OF_RECRUTED,DISTRICTS)
 
 
     
