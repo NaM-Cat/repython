@@ -41,10 +41,7 @@ class District:
         cur = con.cursor()
         cur.execute("UPDATE distr SET population = (?) WHERE name = (?)", (new_population, self.name))
         con.commit()
-        cur.execute("SELECT * FROM distr")
-        rows = cur.fetchall()
-        for row in rows:
-            print(row)
+        print_table(cur,"SELECT * FROM distr")
         cur.close()
         con.close()
 
@@ -73,11 +70,7 @@ class Papperboy(Employee):
                      self.job,
                      self.productivity))
         con.commit()
-        cur.execute("SELECT * FROM employ")
-        rows = cur.fetchall()
-        for row in rows:
-            print(row)
-        
+        print_table(cur,"SELECT * FROM employ")      
         cur.close()
         con.close()
     
@@ -94,7 +87,13 @@ class Papperboy(Employee):
         
     def prdct_perm(x):
         return x
-   
+    
+def print_table(cursor, cmd):
+    cursor.execute(cmd)
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+
 def prdct_distr(district):
     return 1000*(district.population/1000)
 
@@ -132,10 +131,7 @@ def create_graphic(month, list_of_employ, list_of_distr):
                         list_of_distr[distr].name))
             employ += 1
     con.commit()
-    cur.execute("SELECT * FROM graphic")
-    rows = cur.fetchall()
-    for row in rows:
-        print(row)
+    print_table(cur,"SELECT * FROM graphic")
     cur.close()
     con.close()
 
@@ -145,10 +141,7 @@ def change_graphic(date, employ_name, distr_name):
     cur.execute("UPDATE graphic SET employ_name = (?) WHERE distr_name = (?) and date = (?)",
                 (employ_name, distr_name, date))
     con.commit()
-    cur.execute("SELECT * FROM graphic")
-    rows = cur.fetchall()
-    for row in rows:
-        print(row)
+    print_table(cur,"SELECT * FROM graphic")
     cur.close()
     con.close()
 
@@ -211,6 +204,16 @@ create_graphic(4,LIST_OF_RECRUTED,DISTRICTS)
 print('--------AAAAAAAAA------------')
 
 change_graphic(date(2016,4,1),'Алексеев Геннадий Викторович','Centr')
+
+print('--------AAAAAAAAA------------')
+
+con = sqlite3.connect("catalog_zadach.db")
+cur = con.cursor()
+cur.execute("SELECT * FROM graphic")
+rows = cur.fetchall()
+
+print(rows[0][2])
+
 
 
     
