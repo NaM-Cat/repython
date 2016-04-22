@@ -118,7 +118,7 @@ def index_min_popul_distr(list_of_distr):
     return index
     
 
-def create_grafic(month, list_of_employ, list_of_distr):
+def create_graphic(month, list_of_employ, list_of_distr):
     employ = 0
     con = sqlite3.connect("catalog_zadach.db")
     cur = con.cursor()
@@ -126,19 +126,32 @@ def create_grafic(month, list_of_employ, list_of_distr):
         for distr in range(0,len(list_of_distr)):
             if employ == len(list_of_employ):
                 employ = 0
-            cur.execute("INSERT INTO grafic(date, employ_name, distr_name) VALUES (?,?,?)",
+            cur.execute("INSERT INTO graphic(date, employ_name, distr_name) VALUES (?,?,?)",
                         (date(2016,month,day),
                         list_of_employ[employ].name,
                         list_of_distr[distr].name))
             employ += 1
     con.commit()
-    cur.execute("SELECT * FROM grafic")
+    cur.execute("SELECT * FROM graphic")
     rows = cur.fetchall()
     for row in rows:
         print(row)
     cur.close()
     con.close()
-    
+
+def change_graphic(date, employ_name, distr_name):
+    con = sqlite3.connect("catalog_zadach.db")
+    cur = con.cursor()
+    cur.execute("UPDATE graphic SET employ_name = (?) WHERE distr_name = (?) and date = (?)",
+                (employ_name, distr_name, date))
+    con.commit()
+    cur.execute("SELECT * FROM graphic")
+    rows = cur.fetchall()
+    for row in rows:
+        print(row)
+    cur.close()
+    con.close()
+
 con = sqlite3.connect("catalog_zadach.db")
 cur = con.cursor()
 try:
@@ -147,7 +160,7 @@ try:
     cur.execute("DROP TABLE IF EXISTS employ")
     cur.execute("CREATE TABLE employ (id INTEGER PRIMARY KEY , name TEXT, job TEXT, productivity INTEGER)")
     cur.execute("DROP TABLE IF EXISTS grafic")
-    cur.execute("CREATE TABLE grafic (date DATE, employ_name TEXT, distr_name TEXT)")
+    cur.execute("CREATE TABLE graphic (date DATE, employ_name TEXT, distr_name TEXT)")
 except sqlite3.DatabaseError:
     print ("Ошибка:")
 else:
@@ -192,7 +205,12 @@ except ValueError or SyntaxError:
 #print(d)
 
 print('--------AAAAAAAAA------------')
-create_grafic(4,LIST_OF_RECRUTED,DISTRICTS)
+
+create_graphic(4,LIST_OF_RECRUTED,DISTRICTS)
+
+print('--------AAAAAAAAA------------')
+
+change_graphic(date(2016,4,1),'Алексеев Геннадий Викторович','Centr')
 
 
     
