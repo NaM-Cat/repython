@@ -32,9 +32,9 @@ class District:
     def __str__(self):
         return '[District: %s, %s]' % (self.name, self.population)
     
-    def __conform__(self, protocol):
-        if protocol is sqlite3.PrepareProtocol:
-            return "%s|%s" % (self.name, self.population)
+   # def __conform__(self, protocol):
+   #     if protocol is sqlite3.PrepareProtocol:
+   #         return "%s|%s" % (self.name, self.population)
     
     def change_population(self, new_population):
         self.population = new_population
@@ -112,6 +112,17 @@ def productivity(perm = 0, distr = None, prb = False):
         print ('Введены некорретные параметры')
         return
 
+def productivity_new(type_productivity, distr = None):
+    if type_productivity == 1:
+        return PRDCT_DISTR*(distr.population/1000)
+    elif type_productivity == 2:
+        return PRDCT_PERM
+    elif type_productivity == 3:
+        return rand_prb.choice(PRDCT_LIST, p=PRB_LIST)*(distr.population/1000)
+    else:
+        print ('Введены некорретные параметры')
+        return
+
 def index_max_popul_distr(list_of_distr):
     index = 0
     for i in range(0,len(list_of_distr)-1):
@@ -137,7 +148,7 @@ def create_graphic(month, list_of_employ, list_of_distr):
             cur.execute("INSERT INTO graphic(date, employ_name, distr_name) VALUES (?,?,?)",
                         (date(2016,month,day),
                         list_of_employ[employ].name,
-                        list_of_distr[distr].name))
+                        list_of_distr[distr]))
             employ += 1
     con.commit()
  #   print_table(cur,"SELECT * FROM graphic")
@@ -156,9 +167,18 @@ def change_graphic(date, employ_name, distr_name):
 
 def calc_income(start_date, finish_date):
     total_productivity = 0
-    for day in range(start_date.__getattribute__('day'), finish_date.__getattribute__('day')):
-        
-    
+    total_distr = len(DISTRICTS)
+    con = sqlite3.connect("catalog_zadach.db")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM graphic WHERE date > (?) and date < (?)",(start_date, finish_date))
+    rows = cur.fetchall()
+ #   for row in rows:
+ #       print(row)
+#    for day in range(start_date.__getattribute__('day'), finish_date.__getattribute__('day')):
+#        for i_disrt in range(0,total_distr):
+#            total_productivity += productivity_new(type_productivity, distr)
+
+   
 
 con = sqlite3.connect("catalog_zadach.db")
 cur = con.cursor()
@@ -224,11 +244,13 @@ print('--------AAAAAAAAA------------')
 
 con = sqlite3.connect("catalog_zadach.db")
 cur = con.cursor()
-cur.execute("SELECT * FROM graphic")
+cur.execute("SELECT * FROM graphic WHERE date > '2016-04-20' and date < '2016-04-26'")
 rows = cur.fetchall()
+print_table(cur,"SELECT * FROM graphic WHERE date > '2016-04-20' and date < '2016-04-26'")
+print(rows[0][2].name)
+print(len(DISTRICTS))
+calc_income('2016-04-10','2016-04-21') 
 
-print(rows[0][2])
-print(productivity(prb = True))
 
 
 
