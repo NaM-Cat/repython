@@ -101,7 +101,6 @@ class Papperboy(Employee):
     def __del__(self):          
         
         LIST_OF_FIRED.append(self)
-        LIST_OF_RECRUTED.remove(self)
         
         con = sqlite3.connect("catalog_zadach.db")
         cur = con.cursor()
@@ -225,7 +224,7 @@ con.commit()
 cur.close()
 con.close()
 
-District('VIZ', 10000)
+District('VIZ', 10000)                          #добавление новых районов
 District('Centr', 20000)
 District('Uralmash', 15000)
 District('Elmash', 14000)
@@ -233,22 +232,22 @@ District('Sortirovka', 7000)
 
 print('--------------------')
 
-DISTRICTS[0].change_population(11000)
+DISTRICTS[0].change_population(11000)           #изменение численности района
 
 print('--------------------')
 
-Papperboy('Алексеев Геннадий Викторович',1)
+Papperboy('Алексеев Геннадий Викторович',1)     #добавление новых сотрудников
 Papperboy('Хазанов Владимир Андреевич',2)
 Papperboy('Олейко Иван Петрович',3)
 Papperboy('Кременко Алексей Викторович',3)
 
 print('--------------------')
 
-LIST_OF_RECRUTED[0].change_productivity(3)
+LIST_OF_RECRUTED[0].change_productivity(3)      #редактирование производительности
 
 print('--------------------')
 
-LIST_OF_RECRUTED.pop(3)
+LIST_OF_RECRUTED.pop(3)                         #увольнение сотрудника
 
 print('--------------------')
 
@@ -257,15 +256,15 @@ print(Calendar.formatmonth(2016,4))
 
 print('--------------------')
 
-create_graphic(4,LIST_OF_RECRUTED,DISTRICTS)
+create_graphic(4,LIST_OF_RECRUTED,DISTRICTS)    #планирование графика
 
 print('--------------------')
 
-change_graphic(date(2016,4,1),'Алексеев Геннадий Викторович','Centr')
+change_graphic(date(2016,4,1),'Алексеев Геннадий Викторович','Centr')   #внесение изменения в график
 
 print('--------------------')
 
-print(calc_income('2016-04-10','2016-04-21'))
+print(calc_income('2016-04-10','2016-04-21'))   #расчет ожидаемой прибыли за указанный период
 
 
 
